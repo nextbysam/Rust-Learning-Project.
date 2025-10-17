@@ -36,23 +36,29 @@ async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
 
     // Get API key from environment variable
-    let api_key = std::env::var("OPENWEATHER_API_KEY")
-        .expect("OPENWEATHER_API_KEY must be set in .env file");
+    let api_key = std::env::var("WEATHER_API_KEY")
+        .expect("WEATHER_API_KEY must be set in .env file");
 
     println!("{}", format!("🌤️  Fetching weather for {}...", cli.city).cyan());
 
     // Create client and fetch weather
     let client = WeatherClient::new(api_key);
-    let weather = client.fetch_weather(&cli.city).await?;
+    let weather = client.fetch_weather(&cli.city, &cli.units).await?;
 
     // Display results with colors!
+    let (temp_unit, wind_unit) = if cli.units == "imperial" {
+        ("°F", "mph")
+    } else {
+        ("°C", "km/h")
+    };
+
     println!("\n{}", "Weather Report".bold().underline());
     println!("{}: {}", "City".bold(), cli.city);
-    println!("{}: {}°C", "Temperature".bold(), weather.temperature.to_string().yellow());
-    println!("{}: {}°C", "Feels like".bold(), weather.feels_like.to_string().yellow());
+    println!("{}: {}{}", "Temperature".bold(), weather.temperature.to_string().yellow(), temp_unit);
+    println!("{}: {}{}", "Feels like".bold(), weather.feels_like.to_string().yellow(), temp_unit);
     println!("{}: {}%", "Humidity".bold(), weather.humidity.to_string().blue());
     println!("{}: {}", "Conditions".bold(), weather.description);
-    println!("{}: {} m/s", "Wind speed".bold(), weather.wind_speed.to_string().green());
+    println!("{}: {} {}", "Wind speed".bold(), weather.wind_speed.to_string().green(), wind_unit);
     println!("{}: {}", "Source".bold(), weather.source.dimmed());
 
     Ok(())

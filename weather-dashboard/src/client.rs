@@ -19,6 +19,7 @@ impl WeatherClient {
     ///
     /// # Arguments
     /// * `city` - The city name to fetch weather for
+    /// * `units` - Units system: "metric" or "imperial"
     ///
     /// # Returns
     /// * `Result<WeatherData, WeatherError>` - Weather data or an error
@@ -26,13 +27,13 @@ impl WeatherClient {
     /// # Example
     /// ```no_run
     /// let client = WeatherClient::new("your_api_key".to_string());
-    /// let weather = client.fetch_weather("London").await?;
+    /// let weather = client.fetch_weather("London", "metric").await?;
     /// ```
-    pub async fn fetch_weather(&self, city: &str) -> Result<WeatherData, WeatherError> {
-        // Build the API URL
+    pub async fn fetch_weather(&self, city: &str, units: &str) -> Result<WeatherData, WeatherError> {
+        // Build the API URL for WeatherAPI.com
         let url = format!(
-            "https://api.openweathermap.org/data/2.5/weather?q={}&appid={}&units=metric",
-            city, self.api_key
+            "https://api.weatherapi.com/v1/current.json?key={}&q={}&aqi=no",
+            self.api_key, city
         );
 
         // Make the HTTP request
@@ -54,17 +55,31 @@ impl WeatherClient {
 
         // Parse the JSON response
         let response = http_response
-            .json::<OpenWeatherResponse>()
+            .json::<WeatherApiResponse>()
             .await?;
 
         // Convert API response to our WeatherData format
+        // Choose temperature and wind speed based on units
+        let (temperature, feels_like, wind_speed) = match units {
+            "imperial" => (
+                response.current.temp_f,
+                response.current.feelslike_f,
+                response.current.wind_mph,
+            ),
+            _ => (
+                response.current.temp_c,
+                response.current.feelslike_c,
+                response.current.wind_kph,
+            ),
+        };
+
         Ok(WeatherData {
-            temperature: response.main.temp,
-            feels_like: response.main.feels_like,
-            humidity: response.main.humidity,
-            description: response.weather[0].description.clone(),
-            wind_speed: response.wind.speed,
-            source: "OpenWeatherMap".to_string(),
+            temperature,
+            feels_like,
+            humidity: response.current.humidity,
+            description: response.current.condition.text,
+            wind_speed,
+            source: format!("WeatherAPI.com - {}, {}", response.location.name, response.location.country),
         })
     }
 }

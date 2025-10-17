@@ -12,28 +12,33 @@ pub struct WeatherData {
     pub source: String,
 }
 
-/// OpenWeatherMap API response structure
+/// WeatherAPI.com response structure
 /// This matches their JSON format exactly
 #[derive(Debug, Deserialize)]
-pub struct OpenWeatherResponse {
-    pub main: Main,
-    pub weather: Vec<Weather>,
-    pub wind: Wind,
+pub struct WeatherApiResponse {
+    pub location: Location,
+    pub current: Current,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct Main {
-    pub temp: f64,
-    pub feels_like: f64,
+pub struct Location {
+    pub name: String,
+    pub country: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Current {
+    pub temp_c: f64,
+    pub temp_f: f64,
+    pub feelslike_c: f64,
+    pub feelslike_f: f64,
     pub humidity: u8,
+    pub condition: Condition,
+    pub wind_kph: f64,
+    pub wind_mph: f64,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct Weather {
-    pub description: String,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct Wind {
-    pub speed: f64,
+pub struct Condition {
+    pub text: String,
 }
