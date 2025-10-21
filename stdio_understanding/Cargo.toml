@@ -1,0 +1,27 @@
+[package]
+name = "stdio_learning"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+
+# Define example binaries
+[[example]]
+name = "ex01_basic_stdio"
+path = "src/examples/ex01_basic_stdio.rs"
+
+[[example]]
+name = "ex02_stderr_demo"
+path = "src/examples/ex02_stderr_demo.rs"
+
+[[example]]
+name = "ex03_buffering"
+path = "src/examples/ex03_buffering.rs"
+
+[[example]]
+name = "ex04_file_io"
+path = "src/examples/ex04_file_io.rs"
+
+[[example]]
+name = "ex05_pipes"
+path = "src/examples/ex05_pipes.rs"
