@@ -1,14 +1,47 @@
-// Example 3: Understanding Buffering
+// ============================================================================
+// Example 3: Understanding Buffering - Why Output Doesn't Appear Immediately
+// ============================================================================
 //
-// Buffering is when data is collected in memory before being sent to its destination.
-// This is more efficient than sending every single character immediately.
+// WHAT IS BUFFERING?
+// When you write data (like println!), it doesn't go straight to the screen.
+// Instead, it sits in a memory buffer (like a bucket) until:
+//   1. The buffer is full (usually 8KB), OR
+//   2. You print a newline (\n), OR
+//   3. You manually flush, OR
+//   4. The program ends
+//
+// WHY BUFFER?
+// System calls (asking the OS to write to screen/file) are EXPENSIVE:
+//   - Writing "Hello" one char at a time = 5 system calls
+//   - Writing "Hello" all at once = 1 system call
+//   - This makes programs 100-1000x faster for lots of output!
 //
 // Try running:
 //   cargo run --example ex03_buffering
 
+// ----------------------------------------------------------------------------
+// IMPORTS
+// ----------------------------------------------------------------------------
 use std::io::{self, Write};
+// ↑   ↑   ↑
+// │   │   └─ Import io module and Write trait (for .flush())
+// │   └───── Path separator
+// └─────────  Standard library
+
 use std::thread;
+// ↑   ↑
+// │   └─ The thread module (for sleep function)
+// └───── Standard library
+//
+// We need this to pause execution, so you can SEE buffering in action
+
 use std::time::Duration;
+// ↑   ↑    ↑
+// │   │    └─ Duration type (represents a time span)
+// │   └────── time module (time-related types)
+// └────────── Standard library
+//
+// Duration is used to specify how long to sleep
 
 fn main() {
     eprintln!("=== Buffering Demonstration ===\n");
