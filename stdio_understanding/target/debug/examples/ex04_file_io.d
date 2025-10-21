@@ -1,0 +1,1 @@
+/Users/sam/Rust_learning_projects/stdio_understanding/target/debug/examples/ex04_file_io: /Users/sam/Rust_learning_projects/stdio_understanding/src/examples/ex04_file_io.rs
