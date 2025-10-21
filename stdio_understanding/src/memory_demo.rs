@@ -15,7 +15,7 @@ fn main() {
     println!("Variable locations:");
     println!("x (u32):        {:p} = {}", &x as *const u32 as *const (), x);
     println!("y (u64):        {:p} = {}", &y as *const u64 as *const (), y);
-    println!("s (String):     {:p} = {} (ptr: {}, len: {}, cap: {})", 
+    println!("s (String):     {:p} = {} (ptr: {:p}, len: {}, cap: {})", 
              &s as *const String as *const (), s,
              s.as_ptr(), s.len(), s.capacity());
     
