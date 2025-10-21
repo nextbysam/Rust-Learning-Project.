@@ -60,11 +60,9 @@ fn main() {
     
     // reinterpret the same bits as different types
     unsafe {
-        let x_as_u64: u64 = mem::transmute(x);
         let x_as_two_u16s: [u16; 2] = mem::transmute(x);
         
         println!("Original x:     0x{:08x}", x);
-        println!("Reinterpret as u64: 0x{:016x}", x_as_u64);
         println!("Reinterpret as [u16;2]: [0x{:04x}, 0x{:04x}]", x_as_two_u16s[0], x_as_two_u16s[1]);
         
         // Validate: re-transform back
@@ -126,7 +124,8 @@ fn main() {
     println!("- [u8; 4]: [{:02x}, {:02x}, {:02x}, {:02x}]", 
              (x & 0xFF) as u8, ((x >> 8) & 0xFF) as u8, 
              ((x >> 16) & 0xFF) as u8, ((x >> 24) & 0xFF) as u8);
-    println!("- bool bits: {:08b}", x != 0);
+    let bool_val = x != 0;
+    println!("- bool bits: {:08b}", u8::from(bool_val));
     
     println!("\nPress Enter to exit...");
     let mut input = String::new();

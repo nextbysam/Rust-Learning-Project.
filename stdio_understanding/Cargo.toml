@@ -25,3 +25,7 @@ path = "src/examples/ex04_file_io.rs"
 [[example]]
 name = "ex05_pipes"
 path = "src/examples/ex05_pipes.rs"
+
+[[example]]
+name = "ex06_flushing"
+path = "src/examples/ex_06_flushing.rs"
